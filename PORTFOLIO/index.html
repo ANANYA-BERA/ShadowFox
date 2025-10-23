@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Portfolio</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+
+     <!--nav bar-->
+
+    <header id="header">
+      <nav>
+        <h1 class="logo">Ananya Bera</h1>
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#contactMe">Contact</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <!--hero section-->
+
+    <section class="hero">
+      <h1>Hi, I'm Ananya</h1>
+      <p>
+        A passionate Web Developer who loves to build beautiful and functional
+        websites.
+      </p>
+      <a href="#projects" class="button">View Work</a>
+    </section>
+
+    <!--About Section-->
+
+    <section id="about">
+
+        <h2>About Me</h2>
+        <p>I'm a Computer Science Student.
+         I enjoy creating responsive, user-friendly websites using HTML, CSS, JavaScript and learning new technologies thst improve my skills every day.
+         My goal is to become a full-stack developer and build projects that make a positive impact on people's digital experiences.
+        </p>
+
+        <!--skills-->
+
+        <div id="skills">
+        <h3>skills</h3>
+        <ul>
+          <li>HTML</li>
+          <li>CSS</li>
+          <li>JavaScript</li>
+        </ul>
+        </div>
+        
+    </section>
+
+    <!--Projects Sections-->
+
+    <section id="projects">
+      <h2>My Projects</h2>
+      <div class="projectContainer">
+        <div>
+          <h4>To-Do List</h4>
+          <p>
+            A simple web app to manage daily tasks.
+          </p></div>
+
+          <div>
+          <h4>Weather App</h4>
+          <p>
+            Shows real time weather upadates using OpenWeather API.
+          </p></div>
+
+          <div>
+          <h4>Image Search Engine</h4>
+          <p>
+            We can search any image by typing a name, and it will display related images.
+          </p></div>
+        </div>
+    </section> 
+
+    <!--contact section-->
+
+    <section id="contactMe">
+      <h2>Contact Me</h2>
+      <form>
+      <div class="Email">
+        <label for="exampleFormControlInput1" class="form-label">Email address</label>
+        <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
+      </div>
+      <div class="Message">
+        <label for="exampleFormControlTextarea1" class="form-label">Type Your Message</label>
+        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+      </div>
+      <div id="btn">
+      <button type="submit" class="btn-primary">Send Message</button>
+      
+      </div>
+    </form> 
+    </section>
+
+    <footer>© 2025 Ananya Bera | All Rights Reserved</footer>
+
+
+<script src="script.js"></script>
+  </body>
+  
+</html>
