@@ -1,90 +1,120 @@
+// ===== PRODUCT DATA =====
 const products = [
-      {id:1, name:"Wireless Headphones", price:1299, img:"images/headphone.jpg", category:"Electronics"},
-      {id:2, name:"Smart Watch", price:899, img:"images/smartwatch.jpg", category:"Electronics"},
-      {id:3, name:"Smart Watch", price:899, img:"images/smartwatch.jpg", category:"Electronics"},
-      {id:4, name:"Leather Handbag", price:599, img:"images/handbag.jpg", category:"Fashion"},
-      {id:5, name:"4K Smart TV", price:24999, img:"images/tv.jpg", category:"Home"},
-      {id:6, name:"Skincare Set", price:499, img:"images/skincare.jpg", category:"Beauty"},
-      {id:7, name:"Office Chair", price:3599, img:"images/chair.jpg", category:"Home"},
-      {id:8, name:"Wireless Headphones", price:1299, img:"images/headphone.jpg", category:"Electronics"},
-      {id:9, name:"Wireless Headphones", price:1299, img:"images/headphone.jpg", category:"Electronics"},
-      {id:10, name:"4K Smart TV", price:24999, img:"images/tv.jpg", category:"Home"},
-      {id:11, name:"4K Smart TV", price:24999, img:"images/tv.jpg", category:"Home"},
-      {id:12, name:"Leather Handbag", price:599, img:"images/handbag.jpg", category:"Fashion"},
-      {id:13, name:"Leather Handbag", price:599, img:"images/handbag.jpg", category:"Fashion"},
+  { id: 1, name: "Smart Watch", price: 3999, category: "Electronics", img: "images/smartwatch.jpg" },
+  { id: 2, name: "Women's Handbag", price: 899, category: "Fashion", img: "images/handbag.jpg" },
+  { id: 3, name: "Office Chair", price: 2449, category: "Home", img: "images/chair.jpg" },
+  { id: 4, name: "Skincare Combo", price: 999, category: "Beauty", img: "images/skincare.jpg" },
+  { id: 5, name: "Smart TV", price: 24999, category: "Electronics", img: "images/tv.jpg" }
+];
 
+let cart = [];
 
-   
-   
-    ];
+// ===== DISPLAY PRODUCTS =====
+function displayProducts(list) {
+  const productList = document.getElementById("productList");
+  productList.innerHTML = "";
 
-    const cart = [];
+  if (list.length === 0) {
+    productList.innerHTML = `<p style="text-align:center; font-size:1.1rem;">No products found 😢</p>`;
+    return;
+  }
 
-    function renderProducts(list = products) {
-      const container = document.getElementById('productList');
-      container.innerHTML = list.map(p => `
-        <div class="card">
-          <img src="${p.img}" alt="${p.name}">
-          <div class="info">
-            <h3>${p.name}</h3>
-            <div class="price">₹${p.price}</div>
-            <button class="add-btn" onclick="addToCart(${p.id})">Add to Cart</button>
-          </div>
-        </div>
-      `).join('');
-    }
+  list.forEach(p => {
+    const item = document.createElement("div");
+    item.classList.add("product");
+    item.innerHTML = `
+      <img src="${p.img}" alt="${p.name}">
+      <h3>${p.name}</h3>
+      <p>₹${p.price.toLocaleString()}</p>
+      <button class="add-btn" onclick="addToCart(${p.id})">Add to Cart</button>
+    `;
+    productList.appendChild(item);
+  });
+}
 
-    function addToCart(id) {
-      const product = products.find(p => p.id === id);
-      const found = cart.find(i => i.id === id);
-      if (found) found.qty++;
-      else cart.push({...product, qty:1});
-      updateCart();
-    }
+// ===== SEARCH + FILTER + SORT =====
+function filterAndSearchProducts() {
+  const search = document.getElementById("searchInput").value.toLowerCase().trim();
+  const category = document.getElementById("categorySelect").value;
+  const sortOrder = document.getElementById("sortSelect").value;
 
-    function updateCart() {
-      document.getElementById('cartCount').innerText = cart.reduce((s,i)=>s+i.qty,0);
-      const cartItems = document.getElementById('cartItems');
-      let total = 0;
-      cartItems.innerHTML = cart.map(item => {
-        total += item.price * item.qty;
-        return `<div class='cart-item'>
-          <img src='${item.img}' />
-          <div style='flex:1; margin-left:10px;'>${item.name}<br>₹${item.price} x ${item.qty}</div>
-          <button onclick='removeFromCart(${item.id})'>❌</button>
-        </div>`;
-      }).join('');
-      document.getElementById('cartTotal').innerText = total.toFixed(2);
-    }
+  let filtered = [...products];
 
-    function removeFromCart(id) {
-      const index = cart.findIndex(i => i.id === id);
-      if (index > -1) cart.splice(index,1);
-      updateCart();
-    }
+  // Filter by category
+  if (category !== "All") {
+    filtered = filtered.filter(p => p.category === category);
+  }
 
-    function toggleCart() {
-      document.getElementById('cartDrawer').classList.toggle('open');
-    }
+  // Search by name
+  if (search) {
+    filtered = filtered.filter(p => p.name.toLowerCase().includes(search));
+  }
 
-    function filterProducts() {
-      const query = document.getElementById('searchInput').value.toLowerCase();
-      const category = document.getElementById('categorySelect').value;
-      const filtered = products.filter(p =>
-        (category === 'All' || p.category === category) &&
-        p.name.toLowerCase().includes(query)
-      );
-      renderProducts(filtered);
-    }
+  // Sort
+  if (sortOrder === "low-high") {
+    filtered.sort((a, b) => a.price - b.price);
+  } else if (sortOrder === "high-low") {
+    filtered.sort((a, b) => b.price - a.price);
+  }
 
-    function toggleDarkMode() {
-      document.body.classList.toggle('dark');
-    }
+  displayProducts(filtered);
+}
 
-    window.onscroll = () => {
-      const btn = document.getElementById('scrollTop');
-      if (window.scrollY > 300) btn.style.display = 'block';
-      else btn.style.display = 'none';
-    }
+// ===== CART FUNCTIONS =====
+function addToCart(id) {
+  const product = products.find(p => p.id === id);
+  const existing = cart.find(i => i.id === id);
+  
+  if (existing) existing.qty++;
+  else cart.push({ ...product, qty: 1 });
+  
+  updateCart();
+}
 
-    renderProducts();
+function removeFromCart(id) {
+  cart = cart.filter(i => i.id !== id);
+  updateCart();
+}
+
+function updateCart() {
+  const cartItems = document.getElementById("cartItems");
+  const cartCount = document.getElementById("cartCount");
+  const cartTotal = document.getElementById("cartTotal");
+  
+  cartItems.innerHTML = "";
+  let total = 0;
+  
+  cart.forEach(item => {
+    total += item.price * item.qty;
+    const div = document.createElement("div");
+    div.classList.add("cart-item");
+    div.innerHTML = `
+      <span>${item.name} (x${item.qty})</span>
+      <button onclick="removeFromCart(${item.id})">🗑️</button>
+    `;
+    cartItems.appendChild(div);
+  });
+  
+  cartCount.textContent = cart.length;
+  cartTotal.textContent = total.toFixed(2);
+}
+
+function toggleCart() {
+  document.getElementById("cartDrawer").classList.toggle("open");
+}
+
+// ===== DARK MODE =====
+function toggleDarkMode() {
+  document.body.classList.toggle("dark-mode");
+}
+
+// ===== SCROLL TO TOP =====
+const scrollTopBtn = document.getElementById("scrollTop");
+window.addEventListener("scroll", () => {
+  scrollTopBtn.style.display = window.scrollY > 200 ? "block" : "none";
+});
+
+// ===== INITIAL LOAD =====
+document.addEventListener("DOMContentLoaded", () => {
+  displayProducts(products);
+});
